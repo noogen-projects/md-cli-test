@@ -1,0 +1,12 @@
+[package]
+name = "md-cli-test"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+assert_cmd = "2.0"
+pulldown-cmark = "0.13"
+regex = "1.11"
+temp_testdir = "0.2"
+log = "0.4"
+thiserror = "2.0"
