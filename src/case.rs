@@ -356,3 +356,58 @@ fn separate_logs(source: &str) -> String {
 
     outputs.join("\n")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::TestCase;
+
+    #[test]
+    fn parse_test_case() {
+        let test = TestCase::parse(
+            r#"
+$ todo new "test A"
+    Creating `test A` project
+"#,
+            None,
+            None,
+        );
+
+        assert_eq!(test.commands.len(), 1);
+        assert_eq!(test.commands[0], "todo new \"test A\"");
+        assert_eq!(test.output.text, "    Creating `test A` project\n");
+
+        let test = TestCase::parse(
+            r#"
+# Some comment
+$ todo new "test A"
+    Creating `test A` project"#,
+            None,
+            None,
+        );
+
+        assert_eq!(test.commands.len(), 1);
+        assert_eq!(test.commands[0], "todo new \"test A\"");
+        assert_eq!(test.output.text, "    Creating `test A` project");
+
+        let test = TestCase::parse(
+            r#"
+# Some comment
+
+$ mkdir "test A"
+$ todo new "test A"
+    Creating `test A` project
+Error: destination `~/test A` already exists
+"#,
+            None,
+            None,
+        );
+
+        assert_eq!(test.commands.len(), 2);
+        assert_eq!(test.commands[0], "mkdir \"test A\"");
+        assert_eq!(test.commands[1], "todo new \"test A\"");
+        assert_eq!(
+            test.output.text,
+            "    Creating `test A` project\nError: destination `~/test A` already exists\n"
+        );
+    }
+}

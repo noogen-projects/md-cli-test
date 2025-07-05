@@ -192,3 +192,20 @@ fn cat(from_path: PathBuf, to_path: Option<PathBuf>) -> error::Result<CmdRespons
         .map_err(|err| TestError::Command(format!("Failed to read file `{}`: {err}", from_path.display())))?;
     echo(content, to_path)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::split_command_parts;
+
+    #[test]
+    fn split_command() {
+        assert_eq!(split_command_parts("mkdir a b c"), vec!["mkdir", "a", "b", "c"]);
+        assert_eq!(split_command_parts("cd a/b cd \"ef g\""), vec![
+            "cd", "a/b", "cd", "ef g"
+        ]);
+        assert_eq!(split_command_parts("echo \"test A\""), vec!["echo", "test A"]);
+        assert_eq!(split_command_parts("echo a \"b c d\" ef"), vec![
+            "echo", "a", "b c d", "ef"
+        ]);
+    }
+}
