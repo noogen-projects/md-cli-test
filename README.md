@@ -1,6 +1,6 @@
 # md-cli-test
 
-This is a library for integration testing of CLI applications in Rust using _markdown_ files as a source of test cases.
+This is a helper library for integration testing of CLI applications in Rust using _markdown_ files as a source of test cases.
 
 `Tester` automatically extracts and runs command-line examples from code blocks in `.md` specification files, verifying the correctness of CLI application's output. It is especially useful when following a _doctest_-like approach for CLI examples, helping keep your documentation and tests in sync.
 

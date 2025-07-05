@@ -1,7 +1,16 @@
 [package]
 name = "md-cli-test"
 version = "0.1.0"
+authors = ["Aleksandr Mescheriakov <freecoder.xx@gmail.com>"]
 edition = "2024"
+license = "MIT"
+description = "A helper library for integration testing of CLI apps using markdown files as a source of test cases"
+readme = "README.md"
+documentation = "https://docs.rs/md-cli-test"
+repository = "https://github.com/noogen-projects/md-cli-test"
+keywords = ["cli", "testing", "integration-test", "markdown", "doctest"]
+categories = ["development-tools::testing", "command-line-interface", "text-processing"]
+
 
 [dependencies]
 assert_cmd = "2.0"
