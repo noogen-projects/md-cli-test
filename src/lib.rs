@@ -8,14 +8,14 @@ pub mod cmd;
 pub mod error;
 
 #[derive(Debug, Clone)]
-pub struct TestRunner {
+pub struct Tester {
     pub md_file_path: PathBuf,
     pub cargo_bin_alias: Option<String>,
     pub cargo_bin_name: Option<String>,
     pub envs: Vec<(OsString, OsString)>,
 }
 
-impl TestRunner {
+impl Tester {
     pub fn new(md_file_path: impl Into<PathBuf>) -> Self {
         Self {
             md_file_path: md_file_path.into(),
