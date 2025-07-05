@@ -201,7 +201,7 @@ impl TestCase {
                             let bin_name = if let Some(bin_name) = &self.cargo_bin_name {
                                 bin_name.clone()
                             } else {
-                                env::var(format!("CARGO_PKG_NAME"))?
+                                env::var("CARGO_PKG_NAME")?
                             };
 
                             Command::cargo_bin(bin_name)?

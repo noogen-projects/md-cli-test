@@ -14,8 +14,8 @@ categories = ["development-tools::testing", "command-line-interface", "text-proc
 
 [dependencies]
 assert_cmd = "2.0"
+log = "0.4"
 pulldown-cmark = "0.13"
 regex = "1.11"
 temp_testdir = "0.2"
-log = "0.4"
 thiserror = "2.0"
