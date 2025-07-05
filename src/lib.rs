@@ -11,7 +11,7 @@ pub mod error;
 pub struct TestRunner {
     pub md_file_path: PathBuf,
     pub cargo_bin_alias: Option<String>,
-    pub cargo_exe_name: Option<String>,
+    pub cargo_bin_name: Option<String>,
     pub envs: Vec<(OsString, OsString)>,
 }
 
@@ -20,7 +20,7 @@ impl TestRunner {
         Self {
             md_file_path: md_file_path.into(),
             cargo_bin_alias: None,
-            cargo_exe_name: None,
+            cargo_bin_name: None,
             envs: Vec::new(),
         }
     }
@@ -30,8 +30,8 @@ impl TestRunner {
         self
     }
 
-    pub fn with_cargo_exe_name(mut self, cargo_exe_name: impl Into<String>) -> Self {
-        self.cargo_exe_name = Some(cargo_exe_name.into());
+    pub fn with_cargo_bin_name(mut self, cargo_bin_name: impl Into<String>) -> Self {
+        self.cargo_bin_name = Some(cargo_bin_name.into());
         self
     }
 
@@ -51,7 +51,7 @@ impl TestRunner {
         let sections = case::parse_markdown_tests(
             self.md_file_path,
             self.cargo_bin_alias,
-            self.cargo_exe_name,
+            self.cargo_bin_name,
             Some(self.envs),
         )?;
 

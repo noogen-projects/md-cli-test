@@ -18,7 +18,7 @@ pub struct TestSection {
 pub struct TestCase {
     pub commands: Vec<String>,
     pub cargo_bin_alias: String,
-    pub cargo_exe_name: Option<String>,
+    pub cargo_bin_name: Option<String>,
     pub test_dir: Option<PathBuf>,
     pub output: ExpectedOutput,
     pub envs: Vec<(OsString, OsString)>,
@@ -137,7 +137,7 @@ impl TestCase {
         Self {
             commands,
             cargo_bin_alias: String::new(),
-            cargo_exe_name: None,
+            cargo_bin_name: None,
             test_dir: None,
             output: ExpectedOutput {
                 text: expected_output,
@@ -148,14 +148,14 @@ impl TestCase {
         }
     }
 
-    pub fn with_cargo_bin_alias(mut self, alias: impl Into<String>, cargo_exe_name: Option<impl Into<String>>) -> Self {
-        self.set_cargo_bin_alias(alias, cargo_exe_name);
+    pub fn with_cargo_bin_alias(mut self, alias: impl Into<String>, cargo_bin_name: Option<impl Into<String>>) -> Self {
+        self.set_cargo_bin_alias(alias, cargo_bin_name);
         self
     }
 
-    pub fn set_cargo_bin_alias(&mut self, alias: impl Into<String>, cargo_exe_name: Option<impl Into<String>>) {
+    pub fn set_cargo_bin_alias(&mut self, alias: impl Into<String>, cargo_bin_name: Option<impl Into<String>>) {
         self.cargo_bin_alias = alias.into();
-        self.cargo_exe_name = cargo_exe_name.map(Into::into);
+        self.cargo_bin_name = cargo_bin_name.map(Into::into);
     }
 
     pub fn with_test_dir(mut self, test_dir: impl Into<PathBuf>) -> Self {
@@ -198,10 +198,10 @@ impl TestCase {
                 Err(parts) => {
                     if let [name, args @ ..] = &parts[..] {
                         let mut cmd = if *name == self.cargo_bin_alias {
-                            let bin_name = if let Some(bin_name) = &self.cargo_exe_name {
+                            let bin_name = if let Some(bin_name) = &self.cargo_bin_name {
                                 bin_name.clone()
                             } else {
-                                env::var(format!("CARGO_BIN_EXE_{name}"))?
+                                env::var(format!("CARGO_PKG_NAME"))?
                             };
 
                             Command::cargo_bin(bin_name)?
@@ -264,7 +264,7 @@ impl TestCase {
 pub fn parse_markdown_tests(
     md_file_path: impl AsRef<Path>,
     cargo_bin_alias: Option<String>,
-    cargo_exe_name: Option<String>,
+    cargo_bin_name: Option<String>,
     vars: Option<impl IntoIterator<Item = (impl Into<OsString>, impl Into<OsString>)> + Clone>,
 ) -> io::Result<Vec<TestSection>> {
     let md_file_path = md_file_path.as_ref();
@@ -290,7 +290,7 @@ pub fn parse_markdown_tests(
             Event::Text(text) if in_test_case_code_block => {
                 let mut new_test_case = TestCase::parse(text, Some(md_file_path.into()), test_case_start_line);
                 if let Some(alias) = cargo_bin_alias.clone() {
-                    new_test_case.set_cargo_bin_alias(alias, cargo_exe_name.clone());
+                    new_test_case.set_cargo_bin_alias(alias, cargo_bin_name.clone());
                 }
                 if let Some(vars) = vars.clone() {
                     new_test_case.push_envs(vars);
