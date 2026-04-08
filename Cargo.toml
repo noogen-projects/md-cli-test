@@ -11,11 +11,10 @@ repository = "https://github.com/noogen-projects/md-cli-test"
 keywords = ["cli", "testing", "integration-test", "markdown", "doctest"]
 categories = ["development-tools::testing", "command-line-interface", "text-processing"]
 
-
 [dependencies]
 assert_cmd = "2.0"
 log = "0.4"
 pulldown-cmark = "0.13"
-regex = "1.11"
+regex = "1.12"
 temp_testdir = "0.2"
 thiserror = "2.0"
